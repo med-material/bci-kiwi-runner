@@ -13,7 +13,7 @@ data[is.na(data$shamChange),]$shamChange<-0
 #first check with Linear model effect for sham rate but not order
 summary(step(lm(controlEpisode~shamRate+order,data=data)))
 #first check with Linear model effect with shamChange
-summary(step(lm(controlEpisode~shamRate*shamChange,data=data)))
+summary(step(lm(controlEpisode~shamChange,data=data)))
 # check with Linear model for just shamchange instead
 
 summary(step(lm(controlEpisode~shamChange,data=data)))
