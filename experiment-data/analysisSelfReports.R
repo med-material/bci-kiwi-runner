@@ -35,7 +35,7 @@ anova(percContr.Sham,percContr.ShamOrder)
 
 # Plot Sham Rate vs Frustration w/ Error Bars (95% Confidence Interval)
 data$shamRate = factor(data$shamRate, levels=c("0", "15", "30"))
-data$FrustNormalized = (data$FrustEpisode-1)/7
+data$FrustNormalized = (data$FrustEpisode-1)/6
 dsm = summarySE(data, measurevar="FrustNormalized", groupvars=c("shamRate"))
 ggplot(dsm, aes(x=dsm$shamRate, y=dsm$FrustNormalized)) +
   geom_errorbar(aes(ymin=dsm$FrustNormalized-dsm$ci, ymax=dsm$FrustNormalized+dsm$ci), width=.1, size=.5) +
@@ -43,13 +43,13 @@ ggplot(dsm, aes(x=dsm$shamRate, y=dsm$FrustNormalized)) +
   geom_line(aes(group=1), size=1.25) +
   ylim(0,1) +
   theme_bw() +
-  theme(text = element_text(size = 12)) +
-  xlab("Fabricated Input (%)") +
+  theme(text = element_text(size = 13)) +
+  xlab("Fabrication Rate (%)") +
   ylab("Frustration")
 
 # Plot Sham Rate vs Perceived Control w/ Error Bars
 data$shamRate = factor(data$shamRate, levels=c("0", "15", "30"))
-data$controlNormalized = (data$controlEpisode-1)/7
+data$controlNormalized = (data$controlEpisode-1)/6
 dsm = summarySE(data, measurevar="controlNormalized", groupvars=c("shamRate"))
 ggplot(dsm, aes(x=dsm$shamRate, y=dsm$controlNormalized)) +
   geom_errorbar(aes(ymin=dsm$controlNormalized-dsm$ci, ymax=dsm$controlNormalized+dsm$ci), width=.1, size=.5) +
@@ -57,6 +57,6 @@ ggplot(dsm, aes(x=dsm$shamRate, y=dsm$controlNormalized)) +
   geom_line(aes(group=1), size=1.25) +
   ylim(0,1) +
   theme_bw() +
-  theme(text = element_text(size = 12)) +
-  xlab("Fabricated Input (%)") +
+  theme(text = element_text(size = 13)) +
+  xlab("Fabrication Rate (%)") +
   ylab("Perceived Control")
