@@ -8,13 +8,14 @@ require(MASS)
 require(Hmisc)
 require(reshape2)
 require(lme4)
-
-setwd(here("experiment-data"))
+#verify with excluding PID=2 (only got 9/20 instead of 10/20)
+#setwd(here("experiment-data"))
 data<-read.csv("kiwiQuantReport.csv",header=TRUE,sep = ",")
 data[is.na(data$shamChange),]$shamChange<-0
-
+data<-data[!data$PID==2,]
+data$shamRateCont<-as.numeric(data$shamRate)
 #first check with Linear model effect for sham rate but not order
-summary(step(lm(controlEpisode~shamRate+order,data=data)))
+summary(lm(controlEpisode~shamRateCont,data=data))
 #first check with Linear model effect with shamChange
 summary(step(lm(controlEpisode~shamChange,data=data)))
 # check with Linear model for just shamchange instead
