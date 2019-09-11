@@ -12,7 +12,7 @@ require(here)
 require(coin)
 #verify with excluding PID=2 (only got 9/20 instead of 10/20)
 #setwd
-setwd(here("experiment-data"))
+setwd(here::here("experiment-data"))
 data<-read.csv("kiwiQuantReport.csv",header=TRUE,sep = ",")
 data[is.na(data$shamChange),]$shamChange<-0
 #<-data[!data$PID==2,]
@@ -29,7 +29,8 @@ summary(step(lm(controlEpisode~shamChange,data=data)))
 friedman.test.with.post.hoc(FrustEpisode~shamRate|PID,data[,c("FrustEpisode","shamRate","PID")],)
 
 friedman.test.with.post.hoc(controlEpisode~shamRate|PID,data[,c("controlEpisode","shamRate","PID")],)
-
+friedman.test.with.post.hoc(MotivationEpisode~shamRate|PID,data[,c("controlEpisode","shamRate","PID")],)
+friedman.test(MotivationEpisode~shamRate|PID,data)
 
 wilcoxsign_test(data[data$shamRate=='0',]$FrustEpisode ~ data[data$shamRate=='15',]$FrustEpisode, distribution="exact")
 wilcoxsign_test(data[data$shamRate=='0',]$FrustEpisode ~ data[data$shamRate=='30',]$FrustEpisode, distribution="exact")
