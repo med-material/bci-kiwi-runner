@@ -8,12 +8,16 @@ require(MASS)
 require(Hmisc)
 require(reshape2)
 require(lme4)
+require(here)
+require(coin)
 #verify with excluding PID=2 (only got 9/20 instead of 10/20)
-#setwd(here("experiment-data"))
+#setwd
+setwd(here("experiment-data"))
 data<-read.csv("kiwiQuantReport.csv",header=TRUE,sep = ",")
 data[is.na(data$shamChange),]$shamChange<-0
-data<-data[!data$PID==2,]
+#<-data[!data$PID==2,]
 data$shamRateCont<-as.numeric(data$shamRate)
+ data<-data[order(data$PID, data$shamRate),]
 #first check with Linear model effect for sham rate but not order
 summary(lm(controlEpisode~shamRateCont,data=data))
 #first check with Linear model effect with shamChange
@@ -21,6 +25,19 @@ summary(step(lm(controlEpisode~shamChange,data=data)))
 # check with Linear model for just shamchange instead
 
 summary(step(lm(controlEpisode~shamChange,data=data)))
+
+friedman.test.with.post.hoc(FrustEpisode~shamRate|PID,data[,c("FrustEpisode","shamRate","PID")],)
+
+friedman.test.with.post.hoc(controlEpisode~shamRate|PID,data[,c("controlEpisode","shamRate","PID")],)
+
+
+wilcoxsign_test(data[data$shamRate=='0',]$FrustEpisode ~ data[data$shamRate=='15',]$FrustEpisode, distribution="exact")
+wilcoxsign_test(data[data$shamRate=='0',]$FrustEpisode ~ data[data$shamRate=='30',]$FrustEpisode, distribution="exact")
+
+wilcoxsign_test(GroupA ~ GroupB, distribution="exact")
+wilcoxsign_test(data[data$shamRate=='0',]$controlEpisode ~ data[data$shamRate=='15',]$controlEpisode, distribution="exact")
+wilcoxsign_test(data[data$shamRate=='0',]$controlEpisode ~ data[data$shamRate=='30',]$controlEpisode, distribution="exact")
+
 
 #check with ordinal logistic reqression - no significance
 summary(polr(as.factor(FrustEpisode) ~ shamRate, data = data, Hess=TRUE))
@@ -33,6 +50,15 @@ anova(percContr.null,percContr.ShamChange)
 anova(percContr.null,percContr.Sham)
 percContr.ShamOrder <-lmer(controlEpisode~shamRate+shamChange+(1|PID),data=data,REML=FALSE)
 anova(percContr.Sham,percContr.ShamOrder)
+
+# lmer for frustration
+Frust.null<- lmer(FrustEpisode~(1|PID),data=data,REML=FALSE)
+Frust.Sham <-lmer(FrustEpisode~shamRate+(1|PID),data=data,REML=FALSE)
+anova(Frust.null,Frust.Sham)
+FrustContr.ShamOrder <-lmer(FrustEpisode~shamRate+shamChange+(1|PID),data=data,REML=FALSE)
+# friedmann test on sham amount
+anova(Frust.Sham,FrustContr.ShamOrder)
+
 
 # Plot Sham Rate vs Frustration w/ Error Bars (95% Confidence Interval)
 data$shamRate = factor(data$shamRate, levels=c("0", "15", "30"))
