@@ -71,3 +71,11 @@ papers.data %>%
   theme(text = element_text(size = 12))
 
 ## correlation/regression analysis of previous work
+cor(papers.data[papers.data$Paper=="Laar-Hamster",]$`Perceived Control`,papers.data[papers.data$Paper=="Laar-Hamster",]$`Frustration`)
+cor(papers.data[papers.data$Paper=="MED8-Kiwi",]$`Perceived Control`,papers.data[papers.data$Paper=="MED8-Kiwi",]$`Frustration`)
+
+resLaar<- cor.test(papers.data[papers.data$Paper=="Laar-Hamster",]$`Perceived Control`, papers.data[papers.data$Paper=="Laar-Hamster",]$`Frustration`, 
+                   method = "pearson")
+resLaar
+resKiwi <- cor.test(papers.data[papers.data$Paper=="MED8-Kiwi",]$`Perceived Control`, papers.data[papers.data$Paper=="MED8-Kiwi",]$`Frustration`, 
+                    method = "pearson")
