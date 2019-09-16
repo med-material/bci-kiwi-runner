@@ -33,24 +33,34 @@ papers.data %>%
   group_by(Paper) %>%
   ggplot(aes(x=Control, y=Frustration, color=Paper)) +
   scale_colour_manual(values=c("#D55E00", "#009E73", "#0072B2", "#ad4141", "#ad4141", "#ad4141")) +
-  xlim(0,1) +
+  scale_x_continuous(labels = scales::percent, limit=c(0,1)) +
+  #xlim(0,1) +
   ylim(0,1) +
   geom_line(size=1.25) +
   geom_point(size=3.5) +
   theme_bw() +
+  theme(legend.position = "none") +
+  theme(panel.grid.major = element_line(size = 0.45, colour = "#d8d8d8"), panel.grid.minor = element_blank()) + 
   theme(text = element_text(size = 12))
 
-
-##Plot Level of Control vs Fun/Motivation
-papers.data %>% mutate(Motivation.Fun = coalesce(Fun, Motivation)) %>%
-  filter(!is.na(Motivation.Fun)) %>%
+## SMALL VERSION
+##Plot Level of Control vs Frustration Level
+papers.data %>%
+  filter(!is.na(Frustration)) %>%
+  filter(Paper != "MED8-Kiwi") %>%
+  filter(Paper != "McCrea-Hockey") %>%
   group_by(Paper) %>%
-  ggplot(aes(x=Control, y=Motivation.Fun, color=Paper)) +
-  scale_colour_manual(values=c("#D55E00", "#009E73", "#CC79A7", "#0072B2")) + 
-  xlim(0,1) +
+  ggplot(aes(x=Control, y=Frustration, color=Paper)) +
+  scale_colour_manual(values=c("#D55E00", "#009E73", "#0072B2", "#ad4141", "#ad4141", "#ad4141")) +
+  scale_x_continuous(labels = scales::percent, limit=c(0,1)) +
+  #xlim(0,100) +
   ylim(0,1) +
-  geom_point() +
-  geom_line() 
+  geom_line(size=1.25) +
+  geom_point(size=1.75) +
+  theme_bw() +
+  theme(panel.grid.major = element_line(size = 0.45, colour = "#d8d8d8"), panel.grid.minor = element_blank()) + 
+  theme(legend.position = "none") +
+  theme(text = element_text(size = 12))
 
 ##Plot Level of Control vs Perceived Control
 papers.data %>%
@@ -58,14 +68,41 @@ papers.data %>%
   group_by(Paper) %>%
   ggplot(aes(x=Control, y=`Perceived Control`, color=Paper)) +
   scale_colour_manual(values=c("#000000", "#da995fff", "#f6b3b3", "#e79557", "#ad4141", "#da5f5fff", "#009E73", "#0072B2")) + 
-  xlim(0,1) + 
+  scale_x_continuous(labels = scales::percent, limit=c(0,1)) +
+  #xlim(0,1) + 
   ylim(0,1) +
   #geom_hline(yintercept=1) +
   geom_line(size=1.25) +
   geom_point(size=3.5) +
   theme_bw() +
+  theme(legend.position = "none") +
+  theme(panel.grid.major = element_line(size = 0.45, colour = "#d8d8d8"), panel.grid.minor = element_blank()) + 
   theme(text = element_text(size = 12))
-  #do({if(.$Papers=="Greville-Causal1R1")})
+
+## SMALL VERSION
+##Plot Level of Control vs Perceived Control
+papers.data %>%
+  filter(!is.na(`Perceived Control`)) %>%
+  filter(Paper != "MED8-Kiwi") %>%
+  filter(Paper != "MED8-Kiwi-Interp") %>%
+  filter(Paper != "McCrea-Hockey") %>%
+  filter(Paper != "Greville-Causal1") %>%
+  filter(Paper != "Greville-Causal2") %>%
+  filter(Paper != "Greville-Causal3") %>%
+  group_by(Paper) %>%
+  ggplot(aes(x=Control, y=`Perceived Control`, color=Paper)) +
+  scale_colour_manual(values=c("#000000", "#009c73", "#ad4141", "#ad4141", "#009c73", "#009c73","#009c73", "#009c73")) + 
+  scale_x_continuous(labels = scales::percent, limit=c(0,1)) +
+  #xlim(0,1) + 
+  ylim(0,1) +
+  geom_line(size=1.25) +
+  geom_point(size=1.75) +
+  theme_bw() +
+  theme(panel.grid.major = element_line(size = 0.45, colour = "#d8d8d8"), panel.grid.minor = element_blank()) + 
+  theme(legend.title = element_blank()) +
+  theme(legend.position = "none") +
+  theme(text = element_text(size = 12))
+
 
 ##Plot Perceived Control vs Frustration
 papers.data %>%
@@ -78,8 +115,11 @@ papers.data %>%
   geom_line(size=1.25) +
   geom_point(size=3.5) +
   theme_bw() +
+  theme(legend.position = "none") +
+  theme(panel.grid.major = element_line(size = 0.45, colour = "#d8d8d8"), panel.grid.minor = element_blank()) + 
   theme(text = element_text(size = 12))
 
+<<<<<<< HEAD
 ##Plot Perceived Control vs Frustration plus raw data
 papers.data %>%
   filter(!is.na(`Perceived Control`)) %>%
@@ -95,6 +135,22 @@ papers.data %>%
   theme_bw() +
   theme(text = element_text(size = 12))
 
+||||||| merged common ancestors
+=======
+
+##Plot Level of Control vs Fun/Motivation
+papers.data %>% mutate(Motivation.Fun = coalesce(Fun, Motivation)) %>%
+  filter(!is.na(Motivation.Fun)) %>%
+  group_by(Paper) %>%
+  ggplot(aes(x=Control, y=Motivation.Fun, color=Paper)) +
+  scale_colour_manual(values=c("#D55E00", "#009E73", "#CC79A7", "#0072B2")) + 
+  xlim(0,1) +
+  ylim(0,1) +
+  geom_point() +
+  geom_line() 
+
+
+>>>>>>> c786268a3559d8233a076335fd2b35d9b65fae9f
 ## correlation/regression analysis of previous work
 cor(papers.data[papers.data$Paper=="Laar-Hamster",]$`Perceived Control`,papers.data[papers.data$Paper=="Laar-Hamster",]$`Frustration`)
 cor(papers.data[papers.data$Paper=="MED8-Kiwi",]$`Perceived Control`,papers.data[papers.data$Paper=="MED8-Kiwi",]$`Frustration`)
