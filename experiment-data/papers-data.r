@@ -17,6 +17,16 @@ library(ggplot2)
 url <- 'docs.google.com/spreadsheets/d/1EU_GgYr4gQ42Eks8QA5KPyyKwED1eQQRSUTx_PspfEM#gid=1516753331'
 papers.data <- gsheet2tbl(url)
 
+#import kiwi data 
+data<-read.csv("kiwiQuantReport.csv",header=TRUE,sep = ",")
+data[is.na(data$shamChange),]$shamChange<-0
+#<-data[!data$PID==2,]
+data$shamRateCont<-as.numeric(data$shamRate)
+data<-data[order(data$PID, data$shamRate),]
+data$shamRate = factor(data$shamRate, levels=c("0", "15", "30"))
+data$FrustNormalized = (data$FrustEpisode-1)/6
+data$controlNormalized = (data$controlEpisode-1)/6
+
 ##Plot Level of Control vs Frustration Level
 papers.data %>%
   filter(!is.na(Frustration)) %>%
@@ -67,6 +77,21 @@ papers.data %>%
   ylim(0,1) +
   geom_line(size=1.25) +
   geom_point(size=3.5) +
+  theme_bw() +
+  theme(text = element_text(size = 12))
+
+##Plot Perceived Control vs Frustration plus raw data
+papers.data %>%
+  filter(!is.na(`Perceived Control`)) %>%
+  group_by(Paper) %>%
+  
+  ggplot(data=papers.data[!is.na(papers.data$`Perceived Control`),], mapping=aes(x=`Perceived Control`, y=Frustration, color=as.factor(Paper))) +
+  #scale_colour_manual(values=c("#000000", "#ad4141", "#f6b3b3", "#e79557", "#009E73", "#ad4141", "#009E73", "#0072B2")) + 
+  xlim(0,1) +
+  ylim(0,1) +
+  geom_line(size=1.25) +
+  geom_point(size=3.5) +
+  geom_point(data = data,mapping=aes(x=controlNormalized,y=FrustNormalized,color='MED8-Kiwi'),position = "jitter",width = 0.1, height = 0.1)+
   theme_bw() +
   theme(text = element_text(size = 12))
 
