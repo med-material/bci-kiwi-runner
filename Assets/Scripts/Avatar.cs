@@ -41,18 +41,17 @@ public class Avatar : MonoBehaviour
     public static bool endgame;
 
     public static float speed; //current speed of environment moving
-    public static float baseSpeed = -0.0007f; //base speed
+    public static float baseSpeed = -0.001f; //base speed
 
     [Range(0,2)]
     public int condition;
 
-    private int[] cond0 = new int[12] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 }; //0
-    private int[] cond1 = new int[12] { 0, 0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1 }; //1
-    private int[] cond2 = new int[12] { 0, 0, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1 }; //2
+    private int[] cond0 = new int[20] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; //0
+    private int[] cond1 = new int[20] { 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; //1
+    private int[] cond2 = new int[20] { 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; //2
+    private int[] demo = new int[10] { 0, 0, 2, 2, 2, 1, 1, 1, 1, 1 };
     private int[] input;
-
-    //private int[] input = new int[3] { 0, 1, 2};
-
+    
     int i;
 
     void Start()
@@ -118,7 +117,7 @@ public class Avatar : MonoBehaviour
                 playSquawk = false;
             }
             exclamation.enabled = true;
-            rb.transform.Translate(-speed * GameObject.Find("Ground Quad").GetComponent<Transform>().localScale.x, 0, 0);
+            rb.transform.Translate((-speed/1.5f) * GameObject.Find("Ground Quad").GetComponent<Transform>().localScale.x, 0, 0);
         }
     }
 
@@ -156,6 +155,8 @@ public class Avatar : MonoBehaviour
         }
         else
             i++;
+
+        //Debug.Log(input);
     }
 
     private int[] Shuffle(int[] myArray)
@@ -167,7 +168,7 @@ public class Avatar : MonoBehaviour
         foreach (int i in myArray)
             arr += i;
 
-        Debug.Log(arr);
+        //Debug.Log(arr);
         return myArray;
     }
 
@@ -204,6 +205,12 @@ public class Avatar : MonoBehaviour
                 zone = "task";
 
                 inTask = true;
+                if (SpawnObstacles.trials % 5 != 0)
+                {
+                    //SpawnObstacles.spawnTime = 1f;
+                    SpawnObstacles.timeToSpawn = true;
+                }
+
                 break;
 
             case "Slow":
@@ -268,22 +275,31 @@ public class Avatar : MonoBehaviour
 
             case "Slow":
                 speed = baseSpeed;
-                SpawnObstacles.spawnTime = 1.5f;
-                SpawnObstacles.timeToSpawn = true;
+                if(SpawnObstacles.trials % 5 == 0) {
+                    //SpawnObstacles.spawnTime = 1f;
+                    SpawnObstacles.timeToSpawn = true;
+                }
 
                 Show(babies, false, false);
                 zone = "ground";
                 anim.speed *= 2;
                 canDestroy = true;
+
+                SpawnObstacles.trials++;
+
                 break;
 
             case "Flying":
                 speed = baseSpeed;
-                SpawnObstacles.spawnTime = 1.5f;
-                SpawnObstacles.timeToSpawn = true;
+                if (SpawnObstacles.trials % 5 == 0)
+                {
+                    //SpawnObstacles.spawnTime = 1f;
+                    SpawnObstacles.timeToSpawn = true;
+                }
 
                 rb.gravityScale = 1;
                 anim.Play("kiwiJump");
+                SpawnObstacles.trials++;
 
                 canDestroy = true;
                 zone = "ground";

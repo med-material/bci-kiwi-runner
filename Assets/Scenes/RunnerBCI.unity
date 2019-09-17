@@ -543,7 +543,7 @@ GameObject:
   - component: {fileID: 374949302}
   - component: {fileID: 374949301}
   m_Layer: 0
-  m_Name: Ground (MT)
+  m_Name: Ground (max)
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -581,7 +581,7 @@ MonoBehaviour:
   - {fileID: 8394782168953864055, guid: 05fcf995e59442944a48e127bf78e53a, type: 3}
   - {fileID: 5916982858023467114, guid: 69c111375907f9b4c830ac2c782eba1c, type: 3}
   babies: {fileID: 5866701355263844854, guid: 7d2d6070b8b56594fba0e6aeee8ad489, type: 3}
-  maxTrials: 1
+  maxTrials: 20
 --- !u!61 &374949303
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -596,7 +596,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.03736347, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -607,7 +607,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.0747263, y: 1}
   m_EdgeRadius: 0
 --- !u!212 &374949304
 SpriteRenderer:
@@ -683,7 +683,12 @@ PrefabInstance:
     - target: {fileID: 4826168960492815564, guid: 4043c4382637df94a9a64cc95fb262a8,
         type: 3}
       propertyPath: m_Name
-      value: Kiwi (A)
+      value: Kiwi (!)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4826168960492815564, guid: 4043c4382637df94a9a64cc95fb262a8,
+        type: 3}
+      propertyPath: m_Icon
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1131090262, guid: 4043c4382637df94a9a64cc95fb262a8, type: 3}
       propertyPath: m_Enabled
@@ -1027,7 +1032,7 @@ PrefabInstance:
     - target: {fileID: 8601377954685292004, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
         type: 3}
       propertyPath: m_Name
-      value: Ground (MT)
+      value: Ground (max)
       objectReference: {fileID: 0}
     - target: {fileID: 8601377954685292004, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
         type: 3}
@@ -1129,7 +1134,7 @@ PrefabInstance:
     - target: {fileID: -8188558795357090608, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
         type: 3}
       propertyPath: maxTrials
-      value: 1
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -8188558795357090608, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
         type: 3}
@@ -1371,6 +1376,26 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5866701355263844854, guid: 7d2d6070b8b56594fba0e6aeee8ad489,
         type: 3}
+    - target: {fileID: 3819090667383298825, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3819090667383298825, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.03736347
+      objectReference: {fileID: 0}
+    - target: {fileID: 3819090667383298825, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.0747263
+      objectReference: {fileID: 0}
+    - target: {fileID: 9186321950915192450, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6720734424901193957, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1430,16 +1455,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 49.299953
-      objectReference: {fileID: 0}
-    - target: {fileID: 9186321950915192450, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3819090667383298825, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4, type: 3}

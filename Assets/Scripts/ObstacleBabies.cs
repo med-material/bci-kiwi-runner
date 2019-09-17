@@ -13,7 +13,6 @@ public class ObstacleBabies : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         groundSize = GameObject.Find("Ground Quad").GetComponent<Transform>().localScale.x;
         anim = gameObject.GetComponent<Animator>();
-
         Avatar.endgame = true;
     }
 

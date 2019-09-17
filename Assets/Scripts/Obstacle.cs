@@ -5,8 +5,9 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
     private Renderer rend;
+    private float xPos;
     private float groundSize;
-
+    
     void Start()
     {
         rend = GetComponentInChildren<Transform>().Find("SlowZone").GetComponentInChildren<SpriteRenderer>();
@@ -15,11 +16,11 @@ public class Obstacle : MonoBehaviour
 
     void Update()
     {
+        xPos = gameObject.transform.position.x;
         GetComponent<Rigidbody2D>().transform.Translate(Avatar.speed * groundSize, 0, 0);
 
-        if (Avatar.canDestroy && !rend.isVisible) //if obstacle has gone off camera, destroy it
-        {   
-            Avatar.canDestroy = false;
+        if (xPos < -20) //if obstacle has gone off camera, destroy it
+        {
             Destroy(gameObject);
         }
     }
