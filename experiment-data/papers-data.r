@@ -127,12 +127,22 @@ papers.data %>%
 ##Plot Perceived Control vs Frustration plus raw data --------
   ggplot()+
     xlim(0,1) + ylim(0,1) +
-    geom_point(data=dfDataForPercFrustPlot, mapping=aes(x=`Perceived Control`,y=Frustration, color=as.factor(Paper), group=as.factor(Paper)), size=3.5) +
+geom_point(data=dfDataForPercFrustPlot, mapping=aes(x=`Perceived Control`,y=Frustration, color=as.factor(Paper), group=as.factor(Paper)), size=3.5) +
   geom_line(size=1.25) +
     geom_point(data = data,mapping=aes(x=controlNormalized,y=FrustNormalized,color=as.factor(shamRate), group=as.factor(Paper)),position = "jitter",width = 0.1, height = 0.1)+
     geom_smooth(data=data,mapping=aes(x=controlNormalized,y=FrustNormalized,color=shamRate,group=shamRate),method = lm, se = FALSE)+
   theme_bw() +
     theme(text = element_text(size = 12)) 
+
+##Plot Perceived Control vs Frustration ony raw data med8 Kiwi --------
+ggplot()+
+  xlim(0,1) + ylim(0,1) +
+  #    geom_point(data=dfDataForPercFrustPlot, mapping=aes(x=`Perceived Control`,y=Frustration, color=as.factor(Paper), group=as.factor(Paper)), size=3.5) +
+  geom_line(size=1.25) +
+  geom_point(data = data,mapping=aes(x=controlNormalized,y=FrustNormalized,size=as.numeric(as.character(shamRate)),color=as.numeric(as.character(shamRate))),position = "jitter",width = 0.05, height = 0.05)+
+  geom_smooth(data=data,mapping=aes(x=controlNormalized,y=FrustNormalized,group=shamRate,color=as.numeric(as.character(shamRate))),method = lm, se = FALSE)+
+  theme_bw() +
+  theme(text = element_text(size = 12)) 
   
 #aes(linetype=sex, color=sex)
 #geom_smooth(geom_smooth(method = "lm", se = FALSE, linetype = "dashed")
