@@ -119,12 +119,10 @@ papers.data %>%
   theme(panel.grid.major = element_line(size = 0.45, colour = "#d8d8d8"), panel.grid.minor = element_blank()) + 
   theme(text = element_text(size = 12))
 
-<<<<<<< HEAD
 ##Plot Perceived Control vs Frustration plus raw data
 papers.data %>%
   filter(!is.na(`Perceived Control`)) %>%
   group_by(Paper) %>%
-  
   ggplot(data=papers.data[!is.na(papers.data$`Perceived Control`),], mapping=aes(x=`Perceived Control`, y=Frustration, color=as.factor(Paper))) +
   #scale_colour_manual(values=c("#000000", "#ad4141", "#f6b3b3", "#e79557", "#009E73", "#ad4141", "#009E73", "#0072B2")) + 
   xlim(0,1) +
@@ -135,8 +133,6 @@ papers.data %>%
   theme_bw() +
   theme(text = element_text(size = 12))
 
-||||||| merged common ancestors
-=======
 
 ##Plot Level of Control vs Fun/Motivation
 papers.data %>% mutate(Motivation.Fun = coalesce(Fun, Motivation)) %>%
