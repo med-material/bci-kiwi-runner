@@ -125,14 +125,25 @@ papers.data %>%
   group_by(Paper) %>%
   ggplot(data=papers.data[!is.na(papers.data$`Perceived Control`),], mapping=aes(x=`Perceived Control`, y=Frustration, color=as.factor(Paper))) +
   #scale_colour_manual(values=c("#000000", "#ad4141", "#f6b3b3", "#e79557", "#009E73", "#ad4141", "#009E73", "#0072B2")) + 
-  xlim(0,1) +
-  ylim(0,1) +
-  geom_line(size=1.25) +
+ 
+  
   geom_point(size=3.5) +
   geom_point(data = data,mapping=aes(x=controlNormalized,y=FrustNormalized,color='MED8-Kiwi'),position = "jitter",width = 0.1, height = 0.1)+
-  theme_bw() +
-  theme(text = element_text(size = 12))
+  geom_smooth(data=data,formula="FrustNormalized~controlNormalized",method = lm, se = FALSE)
+dfDataForPercFrustPlot<-papers.data[which(papers.data$Paper=='Laar-Hamster' | papers.data$Paper=='MED8-Kiwi'),]
+dfDataForPercFrustPlot<- papers.data[papers.data$Paper=='Laar-Hamster' | papers.data$Paper=='MED8-Kiwi',]
 
+  ggplot()+
+    xlim(0,1) + ylim(0,1) +
+    geom_point(data=dfDataForPercFrustPlot, mapping=aes(x=`Perceived Control`,y=Frustration, color=as.factor(Paper), group=as.factor(Paper)), size=3.5) +
+  geom_line(size=1.25) +
+    geom_point(data = data,mapping=aes(x=controlNormalized,y=FrustNormalized,color='MED8-Kiwi'),position = "jitter",width = 0.1, height = 0.1)+
+    geom_smooth(data=data,formula="FrustNormalized~controlNormalized",method = lm, se = FALSE)+
+  theme_bw() +
+    theme(text = element_text(size = 12)) 
+  
+#aes(linetype=sex, color=sex)
+#geom_smooth(geom_smooth(method = "lm", se = FALSE, linetype = "dashed")
 
 ##Plot Level of Control vs Fun/Motivation
 papers.data %>% mutate(Motivation.Fun = coalesce(Fun, Motivation)) %>%

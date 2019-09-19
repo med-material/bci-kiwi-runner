@@ -107,7 +107,6 @@ ggplot(dsm, aes(x=dsm$shamRate, y=dsm$controlNormalized)) +
   xlab("Fabrication Rate (%)") +
   ylab("Perceived Control")
 
-
 #Plot Sham Rate vs Perceived Control w/ Error Bars  with raw data
 ggplot(dsm, aes(x=dsm$shamRate, y=dsm$controlNormalized)) +
   geom_violin(data=data,aes(factor(shamRate),controlNormalized),trim=FALSE)+
