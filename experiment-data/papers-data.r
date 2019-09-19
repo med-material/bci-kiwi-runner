@@ -14,6 +14,7 @@ library(gsheet)
 library(dplyr)
 library(ggplot2)
 
+# data import and prep ---------
 url <- 'docs.google.com/spreadsheets/d/1EU_GgYr4gQ42Eks8QA5KPyyKwED1eQQRSUTx_PspfEM#gid=1516753331'
 papers.data <- gsheet2tbl(url)
 
@@ -27,6 +28,7 @@ data$shamRate = factor(data$shamRate, levels=c("0", "15", "30"))
 data$FrustNormalized = (data$FrustEpisode-1)/6
 data$controlNormalized = (data$controlEpisode-1)/6
 
+##Plot Level of Control vs Frustration Level ---------
 ##Plot Level of Control vs Frustration Level
 papers.data %>%
   filter(!is.na(Frustration)) %>%
@@ -43,7 +45,7 @@ papers.data %>%
   theme(panel.grid.major = element_line(size = 0.45, colour = "#d8d8d8"), panel.grid.minor = element_blank()) + 
   theme(text = element_text(size = 12))
 
-## SMALL VERSION
+## SMALL VERSION ---------
 ##Plot Level of Control vs Frustration Level
 papers.data %>%
   filter(!is.na(Frustration)) %>%
@@ -62,7 +64,7 @@ papers.data %>%
   theme(legend.position = "none") +
   theme(text = element_text(size = 12))
 
-##Plot Level of Control vs Perceived Control
+##Plot Level of Control vs Perceived Control --------
 papers.data %>%
   filter(!is.na(`Perceived Control`)) %>%
   group_by(Paper) %>%
@@ -79,7 +81,7 @@ papers.data %>%
   theme(panel.grid.major = element_line(size = 0.45, colour = "#d8d8d8"), panel.grid.minor = element_blank()) + 
   theme(text = element_text(size = 12))
 
-## SMALL VERSION
+## SMALL VERSION --------
 ##Plot Level of Control vs Perceived Control
 papers.data %>%
   filter(!is.na(`Perceived Control`)) %>%
@@ -104,7 +106,7 @@ papers.data %>%
   theme(text = element_text(size = 12))
 
 
-##Plot Perceived Control vs Frustration
+##Plot Perceived Control vs Frustration --------
 papers.data %>%
   filter(!is.na(`Perceived Control`)) %>%
   group_by(Paper) %>%
@@ -119,7 +121,7 @@ papers.data %>%
   theme(panel.grid.major = element_line(size = 0.45, colour = "#d8d8d8"), panel.grid.minor = element_blank()) + 
   theme(text = element_text(size = 12))
 
-##Plot Perceived Control vs Frustration plus raw data
+##Plot Perceived Control vs Frustration plus raw data --------
 papers.data %>%
   filter(!is.na(`Perceived Control`)) %>%
   group_by(Paper) %>%
@@ -131,13 +133,14 @@ papers.data %>%
   geom_point(data = data,mapping=aes(x=controlNormalized,y=FrustNormalized,color='MED8-Kiwi'),position = "jitter",width = 0.1, height = 0.1)+
   geom_smooth(data=data,formula="FrustNormalized~controlNormalized",method = lm, se = FALSE)
 dfDataForPercFrustPlot<-papers.data[which(papers.data$Paper=='Laar-Hamster' | papers.data$Paper=='MED8-Kiwi'),]
+data$Paper<-"MED8-KiwiRaw"
 dfDataForPercFrustPlot<- papers.data[papers.data$Paper=='Laar-Hamster' | papers.data$Paper=='MED8-Kiwi',]
 
   ggplot()+
     xlim(0,1) + ylim(0,1) +
     geom_point(data=dfDataForPercFrustPlot, mapping=aes(x=`Perceived Control`,y=Frustration, color=as.factor(Paper), group=as.factor(Paper)), size=3.5) +
   geom_line(size=1.25) +
-    geom_point(data = data,mapping=aes(x=controlNormalized,y=FrustNormalized,color='MED8-Kiwi'),position = "jitter",width = 0.1, height = 0.1)+
+    geom_point(data = data,mapping=aes(x=controlNormalized,y=FrustNormalized,color=as.factor(Paper), group=as.factor(Paper)),position = "jitter",width = 0.1, height = 0.1)+
     geom_smooth(data=data,formula="FrustNormalized~controlNormalized",method = lm, se = FALSE)+
   theme_bw() +
     theme(text = element_text(size = 12)) 
@@ -145,7 +148,7 @@ dfDataForPercFrustPlot<- papers.data[papers.data$Paper=='Laar-Hamster' | papers.
 #aes(linetype=sex, color=sex)
 #geom_smooth(geom_smooth(method = "lm", se = FALSE, linetype = "dashed")
 
-##Plot Level of Control vs Fun/Motivation
+##Plot Level of Control vs Fun/Motivation --------
 papers.data %>% mutate(Motivation.Fun = coalesce(Fun, Motivation)) %>%
   filter(!is.na(Motivation.Fun)) %>%
   group_by(Paper) %>%
@@ -157,7 +160,6 @@ papers.data %>% mutate(Motivation.Fun = coalesce(Fun, Motivation)) %>%
   geom_line() 
 
 
->>>>>>> c786268a3559d8233a076335fd2b35d9b65fae9f
 ## correlation/regression analysis of previous work
 cor(papers.data[papers.data$Paper=="Laar-Hamster",]$`Perceived Control`,papers.data[papers.data$Paper=="Laar-Hamster",]$`Frustration`)
 cor(papers.data[papers.data$Paper=="MED8-Kiwi",]$`Perceived Control`,papers.data[papers.data$Paper=="MED8-Kiwi",]$`Frustration`)

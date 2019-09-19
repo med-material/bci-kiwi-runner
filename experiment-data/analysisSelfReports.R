@@ -12,6 +12,8 @@ require(here)
 require(coin)
 require(sqldf)
 
+## data preparation --------------------------------------------------------
+
 #verify with excluding PID=2 (only got 9/20 instead of 10/20)
 #setwd
 setwd(here::here("experiment-data"))
@@ -25,6 +27,8 @@ summary(lm(controlEpisode~shamRateCont,data=data))
 #first check with Linear model effect with shamChange
 summary(step(lm(controlEpisode~shamChange,data=data)))
 # check with Linear model for just shamchange instead
+
+## stats analyis modelling  -------------
 
 summary(step(lm(controlEpisode~shamChange,data=data)))
 
@@ -62,7 +66,7 @@ FrustContr.ShamOrder <-lmer(FrustEpisode~shamRate+shamChange+(1|PID),data=data,R
 # friedmann test on sham amount
 anova(Frust.Sham,FrustContr.ShamOrder)
 
-
+# plotting fabrictaion Rate vs Frustration w/ Error Bars (95% Confidence Interval)  ----------- 
 # Plot Sham Rate vs Frustration w/ Error Bars (95% Confidence Interval)
 data$shamRate = factor(data$shamRate, levels=c("0", "15", "30"))
 data$FrustNormalized = (data$FrustEpisode-1)/6
@@ -77,7 +81,8 @@ ggplot(dsm, aes(x=dsm$shamRate, y=dsm$FrustNormalized)) +
   xlab("Fabrication Rate (%)") +
   ylab("Frustration")
 
-# Plot Sham Rate vs Frustration w/ Error Bars (95% Confidence Interval) + raw data
+# plotting fabrictaion Rate vs Frustration w/ Error Bars (95% Confidence Interval)  ) + raw data ----------- 
+# Plot Sham Rate vs Frustration w/ Error Bars (95% Confidence Interval
 data$shamRate = factor(data$shamRate, levels=c("0", "15", "30"))
 data$FrustNormalized = (data$FrustEpisode-1)/6
 dsm = summarySE(data, measurevar="FrustNormalized", groupvars=c("shamRate"))
@@ -93,6 +98,7 @@ ggplot(dsm, aes(x=dsm$shamRate, y=dsm$FrustNormalized)) +
   xlab("Fabrication Rate (%)") +
   ylab("Frustration")
 
+# Plot Sham Rate vs Perceived Control w/ Error Bars -----------------
 # Plot Sham Rate vs Perceived Control w/ Error Bars
 data$shamRate = factor(data$shamRate, levels=c("0", "15", "30"))
 data$controlNormalized = (data$controlEpisode-1)/6
@@ -107,7 +113,9 @@ ggplot(dsm, aes(x=dsm$shamRate, y=dsm$controlNormalized)) +
   xlab("Fabrication Rate (%)") +
   ylab("Perceived Control")
 
+#Plot Fabrication Rate vs Perceived Control w/ Error Bars  with raw data ----------
 #Plot Sham Rate vs Perceived Control w/ Error Bars  with raw data
+
 ggplot(dsm, aes(x=dsm$shamRate, y=dsm$controlNormalized)) +
   geom_violin(data=data,aes(factor(shamRate),controlNormalized),trim=FALSE)+
   geom_errorbar(aes(ymin=dsm$controlNormalized-dsm$ci, ymax=dsm$controlNormalized+dsm$ci), width=.1, size=.5) +
