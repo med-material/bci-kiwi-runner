@@ -139,6 +139,35 @@ sqldf("select ExpInsight, avg(FrustEpisode) from data group by expinsight")
 sqldf("select ExpInsight, median(ControlEpisode) from data group by expinsight")
 sqldf("select ExpInsight, median(FrustEpisode) from data group by expinsight")
 
+
+# analysis of by participant change in ratings between conditions checking for reasons for bi-modal distribution 
+ggplot(data,aes(x=shamRate,y=controlNormalized,group=PID,colour=as.factor(PID)))+geom_point(position=position_jitter(w=0.02, h=0.02))+geom_line(position=position_jitter(w=0.02, h=0.02))
+
+ctrldataBL<-sqldf('select PID, controlEpisode as ctrlBL from data where shamRate=0')
+#sqldf('select d.PID, d.shamRate, d.controlEpisode - c.ctrlBL as CtrlChange from data as d, ctrldataBL as c where d.PID=c.PID')
+ctrlChangeFromSham<-sqldf('select d.PID, d.shamRate, d.controlEpisode, d.controlEpisode - c.ctrlBL as CtrlChange from data as d, ctrldataBL as c where d.PID=c.PID')
+ctrlChangeFromSham$aboveAvg<-ifelse(ctrlChangeFromSham$controlEpisode>3,1,0)
+sqldf('select shamRate, avg(ctrlchange) from  ctrlChangeFromSham  group by shamRate')
+sqldf('select shamRate, aboveAvg,avg(ctrlchange) from  ctrlChangeFromSham  group by shamRate,aboveAvg')
+t.test(ctrlChangeFromSham[ctrlChangeFromSham$shamRate==15,]$controlEpisode~ctrlChangeFromSham[ctrlChangeFromSham$shamRate==15,]$aboveAvg)
+#test whether people above average in 15%sham saw higher gains getting there than the people inthe lower half
+t.test(ctrlChangeFromSham[ctrlChangeFromSham$shamRate==15,]$CtrlChange~ctrlChangeFromSham[ctrlChangeFromSham$shamRate==15,]$aboveAvg)
+t.test(ctrlChangeFromSham[ctrlChangeFromSham$shamRate==15,]$controlEpisode-ctrlChangeFromSham[ctrlChangeFromSham$shamRate==15,]$CtrlChange~ctrlChangeFromSham[ctrlChangeFromSham$shamRate==15,]$aboveAvg)
+
+
+#test whether those who didn't respond well to sham were more frustrated at baseline and at 15%
+FrustCtrl<-sqldf('select c.PID, c.shamRate, d.controlEpisode, d.CtrlChange, d.aboveAvg, c.FrustEpisode from ctrlChangeFromSham as d, data as c where d.PID=c.PID and d.shamRate=15')
+sqldf('select shamRate, aboveAvg, avg(FrustEpisode) from FrustCtrl group by shamRate, aboveAvg')
+t.test(FrustCtrl[FrustCtrl$shamRate==0,]$FrustEpisode~FrustCtrl[FrustCtrl$shamRate==0,]$aboveAvg)
+t.test(FrustCtrl[FrustCtrl$shamRate==15,]$FrustEpisode~FrustCtrl[FrustCtrl$shamRate==15,]$aboveAvg)
+
+
+# analysis of by participant change in ratings between conditions checking for reasons for bi-modal distribution in 30% fab input 
+ggplot(data,aes(x=shamRate,y=FrustNormalized,group=PID,colour=as.factor(PID)))+geom_point(position=position_jitter(w=0.02, h=0.02))+geom_line(position=position_jitter(w=0.02, h=0.02))
+
+
+
+
 # analysis of correlation between frust and percC ------------
  require(foreign)
  require(ggplot2)

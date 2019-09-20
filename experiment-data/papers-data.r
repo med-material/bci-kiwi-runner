@@ -168,3 +168,4 @@ resLaar<- cor.test(papers.data[papers.data$Paper=="Laar-Hamster",]$`Perceived Co
 resLaar
 resKiwi <- cor.test(papers.data[papers.data$Paper=="MED8-Kiwi",]$`Perceived Control`, papers.data[papers.data$Paper=="MED8-Kiwi",]$`Frustration`, 
                     method = "pearson")
+summary(lm(`Frustration`~`Perceived Control`, data=papers.data[papers.data$Paper=="Laar-Hamster",]))
