@@ -11,11 +11,11 @@ public class BlinkDetector : MonoBehaviour
     {
         if (!TobiiAPI.GetGazePoint().IsRecent(0.1f))
         {
-            blinked = true;
+            blinked = false;
         }
         else
         {
-            blinked = false;
+            blinked = true;
         }
     }
 }

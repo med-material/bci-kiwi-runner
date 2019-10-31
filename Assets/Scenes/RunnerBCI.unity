@@ -1517,7 +1517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filepath: C:\Users\maxime\Desktop\tuto unity\kiwilog.csv
   sep: ;
-  overwriteLog: 0
+  overwriteLog: 1
 --- !u!4 &765625859
 Transform:
   m_ObjectHideFlags: 0
