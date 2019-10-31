@@ -24,6 +24,7 @@ public class Avatar : Lognotifier
     public SpriteRenderer prep;
     public SpriteRenderer exclamation;
 
+    public bool blinkeye = false;
     public static bool canDestroy;
     private bool end;
 
@@ -40,7 +41,7 @@ public class Avatar : Lognotifier
 
     bool sham;
     private bool canStart;
-    public static bool start;
+    public static bool start = false;
     public static bool endgame;
     public float Distance_;
     public static float speed; //current speed of environment moving
@@ -59,6 +60,7 @@ public class Avatar : Lognotifier
 
     void Start()
     {
+       
         zone = "prestart";
         speed = baseSpeed; //set speed to base speed at first
 
@@ -88,8 +90,9 @@ public class Avatar : Lognotifier
 
     void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || BlinkDetector.blinked) && !start && canStart)
+        if ((Input.GetKeyDown(KeyCode.Space) || !BlinkDetector.blinked) && !blinkeye  && !start && canStart)
         {
+            StartCoroutine(blinkdelay());
             zone = "ground";
             start = true;
 
@@ -103,33 +106,24 @@ public class Avatar : Lognotifier
             canStart = false;
         }
 
-        if (inTask == false && Input.GetKeyDown(KeyCode.UpArrow))
+        if (inTask == false && start && !blinkeye && !canStart && (!BlinkDetector.blinked || Input.GetKeyDown(KeyCode.UpArrow)))
         {
+            StartCoroutine(blinkdelay());
             Debug.Log("invalid");
             Dictionary<string, List<string>> badblinkCollection = new Dictionary<string, List<string>>();
             badblinkCollection.Add("Event", new List<string>());
             badblinkCollection["Event"].Add("InvalidBlink");
-
-            foreach (var contents in badblinkCollection.Keys)
-            {
-
-                foreach (var listMember in badblinkCollection[contents])
-                {
-                    Debug.Log("Key : " + contents + " member :" + listMember);
-                }
-            }
-
             notify(badblinkCollection);
         }
 
-        if (inTask && (BlinkDetector.blinked && Input.GetKeyDown(KeyCode.UpArrow)))
+        if (inTask && !blinkeye && (!BlinkDetector.blinked || Input.GetKeyDown(KeyCode.UpArrow)))
         {
+            StartCoroutine(blinkdelay());
             doneDidDoIt = true;
             Invoke("StopDoinIt", 0.1f);
             Task(input[i]);
             inTask = false;
         }
-
 
         if (!end && endgame)
         {
@@ -143,6 +137,12 @@ public class Avatar : Lognotifier
         }
     }
 
+    IEnumerator blinkdelay()
+    {
+        blinkeye = true;
+        yield return new WaitForSeconds(0.3f);
+        blinkeye = false;
+    }
 
     void StopDoinIt()
     {
@@ -265,6 +265,7 @@ public class Avatar : Lognotifier
             case "Cue":
                 prep.enabled = true;
                 zone = "cue";
+                notify(new Dictionary<string, List<string>>() { { "Event", new List<string> { "TrialStart" } } });
                 signallogCollection["Event"].Add("DontBlinkSignal");
                 notify(signallogCollection);
                 break;
@@ -354,15 +355,15 @@ public class Avatar : Lognotifier
                 {
                     //SpawnObstacles.spawnTime = 1f;
                     SpawnObstacles.timeToSpawn = true;
-                    vareventlogCollection["Event"].Add("KiwiObstacle");
-                    notify(vareventlogCollection);
+                    notify(new Dictionary<string, List<string>>() { { "Event", new List<string> { "KiwiObstacle" } } });
                 }
 
                 Show(babies, false, false);
                 zone = "ground";
                 anim.speed *= 2;
                 canDestroy = true;
-
+                vareventlogCollection["Event"].Add("TrialEnd");
+                notify(vareventlogCollection);
                 SpawnObstacles.trials++;
                 break;
 
@@ -376,6 +377,8 @@ public class Avatar : Lognotifier
 
                 rb.gravityScale = 1;
                 anim.Play("kiwiJump");
+                vareventlogCollection["Event"].Add("TrialEnd");
+                notify(vareventlogCollection);
                 SpawnObstacles.trials++;
                 canDestroy = true;
                 zone = "ground";
