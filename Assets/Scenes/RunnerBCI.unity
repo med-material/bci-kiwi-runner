@@ -1515,9 +1515,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f09fe2b5af7f00b49b0163f0bfe36059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  filepath: C:\Users\maxime\Desktop\tuto unity\kiwilog.csv
   sep: ;
-  date: 
-  shouldLog: 1
+  overwriteLog: 0
 --- !u!4 &765625859
 Transform:
   m_ObjectHideFlags: 0
