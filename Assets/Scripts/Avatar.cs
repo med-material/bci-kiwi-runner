@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Avatar : MonoBehaviour
+//herit from the lognotifier script for the notify function (logging to csv)
+public class Avatar : Lognotifier
 {
     private Rigidbody2D rb;
     private Animator anim;
@@ -17,7 +19,7 @@ public class Avatar : MonoBehaviour
     private bool inTask; //checks if player is within task phase
 
     private float jumpForce;
-    
+
     public SpriteRenderer signal;
     public SpriteRenderer prep;
     public SpriteRenderer exclamation;
@@ -31,19 +33,20 @@ public class Avatar : MonoBehaviour
 
     public GameObject babies;
     public GameObject heart;
-    
+    public GameObject kiwi;
+    private Transform Trampoline;
+
     private bool playSquawk = true;
 
     bool sham;
-    
     private bool canStart;
     public static bool start;
     public static bool endgame;
-
+    public float Distance_;
     public static float speed; //current speed of environment moving
     public static float baseSpeed = -0.001f; //base speed
 
-    [Range(0,2)]
+    [Range(0, 2)]
     public int condition;
 
     private int[] cond0 = new int[20] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; //0
@@ -51,11 +54,12 @@ public class Avatar : MonoBehaviour
     private int[] cond2 = new int[20] { 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; //2
     private int[] demo = new int[10] { 0, 0, 2, 2, 2, 1, 1, 1, 1, 1 };
     private int[] input;
-    
+
     int i;
 
     void Start()
     {
+
         zone = "prestart";
         speed = baseSpeed; //set speed to base speed at first
 
@@ -82,7 +86,7 @@ public class Avatar : MonoBehaviour
         Invoke("OhNo", 2.0f);
         Invoke("StartGame", 4.0f);
     }
-    
+
     void Update()
     {
         if ((Input.GetKeyDown(KeyCode.Space) || BlinkDetector.blinked) && !start && canStart)
@@ -98,18 +102,19 @@ public class Avatar : MonoBehaviour
             signal.enabled = false;
             music.Play();
             canStart = false;
+
+
         }
-        
-        if (inTask && (BlinkDetector.blinked || Input.GetKeyDown(KeyCode.UpArrow)))
+
+        if (inTask && (BlinkDetector.blinked && Input.GetKeyDown(KeyCode.UpArrow)))
         {
             doneDidDoIt = true;
             Invoke("StopDoinIt", 0.1f);
-
             Task(input[i]);
             inTask = false;
         }
-        
-        if(!end && endgame)
+
+        if (!end && endgame)
         {
             if (playSquawk)
             {
@@ -117,9 +122,10 @@ public class Avatar : MonoBehaviour
                 playSquawk = false;
             }
             exclamation.enabled = true;
-            rb.transform.Translate((-speed/1.5f) * GameObject.Find("Ground Quad").GetComponent<Transform>().localScale.x, 0, 0);
+            rb.transform.Translate((-speed / 1.5f) * GameObject.Find("Ground Quad").GetComponent<Transform>().localScale.x, 0, 0);
         }
     }
+
 
     void StopDoinIt()
     {
@@ -138,25 +144,67 @@ public class Avatar : MonoBehaviour
         Show(babies, true, true);
         kiwiSquawk.Play();
     }
+    
+    //this function add the current trial and the trampolineoffset each time the notify function is called 
+    protected override void notify(Dictionary<string, List<string>> dico)
+    {
+        dico.Add("KiwiTrampolineOffset", new List<string>());
+        dico.Add("Current Trial", new List<string>());
+        GameObject temp = GameObject.Find("TriggerZone");
+        
+        if (temp)
+        {
+            Trampoline = temp.GetComponent<Transform>();
+        }
+
+        Distance_ = Vector2.Distance(kiwi.transform.position, Trampoline.position);
+        string strdistance = Distance_.ToString();
+        dico["KiwiTrampolineOffset"].Add(strdistance);
+        dico["Current Trial"].Add(SpawnObstacles.trials.ToString());
+        base.notify(dico);
+
+    }
+
 
     public void Task(int input)
     {
+        Dictionary<string, List<string>> blinklogCollection = new Dictionary<string, List<string>>();
+        blinklogCollection.Add("Event", new List<string>());
         if (input == 1) //if has completed task, jump and reset success
         {
+
             Jump();
+            List<string> row = new List<string>();
+            blinklogCollection["Event"].Add("BlinkAccepted");
+            Debug.Log("input = 1");
+            notify(blinklogCollection);
             i++;
+            
+
+
         }
         else if (input == 2)
         {
+            blinklogCollection["Event"].Add("ShamFeedback");
+            Debug.Log("input = 2");
+            notify(blinklogCollection);
             i++;
             sham = true;
-            float r = Random.Range(0.5f, 4.0f);
+            float r = UnityEngine.Random.Range(0.5f, 4.0f);
             Invoke("Jump", r);
+
+
         }
-        else
+        else if (input == 0)
+        {
+            blinklogCollection["Event"].Add("BlinkDiscarded");
+            Debug.Log("input = 0");
+            notify(blinklogCollection);
             i++;
 
-        //Debug.Log(input);
+            //Debug.Log(input);
+        }
+
     }
 
     private int[] Shuffle(int[] myArray)
@@ -174,12 +222,16 @@ public class Avatar : MonoBehaviour
 
     private void Jump() //when jumping, play feedback
     {
+        Dictionary<string, List<string>> jumplogCollection = new Dictionary<string, List<string>>();
+        jumplogCollection.Add("Event", new List<string>());
+
         jumping = true;
 
         rb.AddForce(Vector2.up * jumpForce);
         feedback.Play();
         anim.Play("kiwiJump");
-
+        jumplogCollection["Event"].Add("KiwiJumped");
+        notify(jumplogCollection);
         sham = false;
     }
 
@@ -191,17 +243,22 @@ public class Avatar : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Dictionary<string, List<string>> signallogCollection = new Dictionary<string, List<string>>();
+        signallogCollection.Add("Event", new List<string>());
         switch (other.tag)
         {
             case "Cue":
                 prep.enabled = true;
                 zone = "cue";
+                signallogCollection["Event"].Add("DontBlinkSignal");
+                notify(signallogCollection);
                 break;
 
             case "TriggerZone":
                 prep.enabled = false;
                 signal.enabled = true;
-                
+                signallogCollection["Event"].Add("BlinkSignal");
+                notify(signallogCollection);
                 zone = "task";
 
                 inTask = true;
@@ -217,8 +274,9 @@ public class Avatar : MonoBehaviour
                 speed *= 0.5f;
                 anim.speed *= 0.5f;
                 Show(babies, true, true);
-
                 zone = "slow";
+                signallogCollection["Event"].Add("KiwiObstacle");
+                notify(signallogCollection);
                 break;
 
             case "Sham":
@@ -266,6 +324,8 @@ public class Avatar : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        Dictionary<string, List<string>> vareventlogCollection = new Dictionary<string, List<string>>();
+        vareventlogCollection.Add("Event", new List<string>());
         switch (other.tag)
         {
             case "TriggerZone":
@@ -275,9 +335,12 @@ public class Avatar : MonoBehaviour
 
             case "Slow":
                 speed = baseSpeed;
-                if(SpawnObstacles.trials % 5 == 0) {
+                if (SpawnObstacles.trials % 5 == 0)
+                {
                     //SpawnObstacles.spawnTime = 1f;
                     SpawnObstacles.timeToSpawn = true;
+                    vareventlogCollection["Event"].Add("KiwiObstacle");
+                    notify(vareventlogCollection);
                 }
 
                 Show(babies, false, false);
@@ -286,7 +349,6 @@ public class Avatar : MonoBehaviour
                 canDestroy = true;
 
                 SpawnObstacles.trials++;
-
                 break;
 
             case "Flying":
@@ -300,7 +362,6 @@ public class Avatar : MonoBehaviour
                 rb.gravityScale = 1;
                 anim.Play("kiwiJump");
                 SpawnObstacles.trials++;
-
                 canDestroy = true;
                 zone = "ground";
                 windSound.Stop();

@@ -758,6 +758,10 @@ PrefabInstance:
       value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1131090263, guid: 4043c4382637df94a9a64cc95fb262a8, type: 3}
+      propertyPath: m_MyEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1131090263, guid: 4043c4382637df94a9a64cc95fb262a8, type: 3}
       propertyPath: fb
       value: 
       objectReference: {fileID: 0}
@@ -893,6 +897,30 @@ PrefabInstance:
       propertyPath: heart
       value: 
       objectReference: {fileID: 1186622441}
+    - target: {fileID: 1131090263, guid: 4043c4382637df94a9a64cc95fb262a8, type: 3}
+      propertyPath: kiwi
+      value: 
+      objectReference: {fileID: 308448756}
+    - target: {fileID: 1131090263, guid: 4043c4382637df94a9a64cc95fb262a8, type: 3}
+      propertyPath: m_MyEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1131090263, guid: 4043c4382637df94a9a64cc95fb262a8, type: 3}
+      propertyPath: m_MyEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1131090263, guid: 4043c4382637df94a9a64cc95fb262a8, type: 3}
+      propertyPath: m_MyEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 765625858}
+    - target: {fileID: 1131090263, guid: 4043c4382637df94a9a64cc95fb262a8, type: 3}
+      propertyPath: m_MyEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: logevent
+      objectReference: {fileID: 0}
+    - target: {fileID: 1131090263, guid: 4043c4382637df94a9a64cc95fb262a8, type: 3}
+      propertyPath: m_MyEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3984538750044943319, guid: 4043c4382637df94a9a64cc95fb262a8,
         type: 3}
       propertyPath: m_Enabled
@@ -1458,6 +1486,52 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6ea90f3ea5ad6a4b8d9aa1117ca1ed4, type: 3}
+--- !u!1 &765625857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 765625859}
+  - component: {fileID: 765625858}
+  m_Layer: 0
+  m_Name: logtodisk
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &765625858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765625857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09fe2b5af7f00b49b0163f0bfe36059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sep: ;
+  date: 
+  shouldLog: 1
+--- !u!4 &765625859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765625857}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &830564060 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3236453737815359842, guid: d8c1954055d66c44faeb2c2f68656561,
