@@ -59,7 +59,6 @@ public class Avatar : Lognotifier
 
     void Start()
     {
-
         zone = "prestart";
         speed = baseSpeed; //set speed to base speed at first
 
@@ -102,8 +101,25 @@ public class Avatar : Lognotifier
             signal.enabled = false;
             music.Play();
             canStart = false;
+        }
 
+        if (inTask == false && Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Debug.Log("invalid");
+            Dictionary<string, List<string>> badblinkCollection = new Dictionary<string, List<string>>();
+            badblinkCollection.Add("Event", new List<string>());
+            badblinkCollection["Event"].Add("InvalidBlink");
 
+            foreach (var contents in badblinkCollection.Keys)
+            {
+
+                foreach (var listMember in badblinkCollection[contents])
+                {
+                    Debug.Log("Key : " + contents + " member :" + listMember);
+                }
+            }
+
+            notify(badblinkCollection);
         }
 
         if (inTask && (BlinkDetector.blinked && Input.GetKeyDown(KeyCode.UpArrow)))
@@ -113,6 +129,7 @@ public class Avatar : Lognotifier
             Task(input[i]);
             inTask = false;
         }
+
 
         if (!end && endgame)
         {
@@ -155,16 +172,13 @@ public class Avatar : Lognotifier
         if (temp)
         {
             Trampoline = temp.GetComponent<Transform>();
+            Distance_ = Vector2.Distance(kiwi.transform.position, Trampoline.position);
+            string strdistance = Distance_.ToString();
+            dico["KiwiTrampolineOffset"].Add(strdistance);
+            dico["Current Trial"].Add(SpawnObstacles.trials.ToString());
+            base.notify(dico);
         }
-
-        Distance_ = Vector2.Distance(kiwi.transform.position, Trampoline.position);
-        string strdistance = Distance_.ToString();
-        dico["KiwiTrampolineOffset"].Add(strdistance);
-        dico["Current Trial"].Add(SpawnObstacles.trials.ToString());
-        base.notify(dico);
-
     }
-
 
     public void Task(int input)
     {
@@ -195,6 +209,7 @@ public class Avatar : Lognotifier
 
 
         }
+
         else if (input == 0)
         {
             blinklogCollection["Event"].Add("BlinkDiscarded");
