@@ -89,9 +89,9 @@ dsm = summarySE(data, measurevar="FrustNormalized", groupvars=c("shamRate"))
 ggplot(dsm, aes(x=dsm$shamRate, y=dsm$FrustNormalized)) +
   geom_violin(data=data,aes(factor(shamRate),FrustNormalized),trim=FALSE)+
   geom_errorbar(aes(ymin=dsm$FrustNormalized-dsm$ci, ymax=dsm$FrustNormalized+dsm$ci), width=.1, size=.5) +
-  geom_point(size=3.25)+ 
-  geom_line(aes(group=1), size=1.25) +
-  geom_jitter(data=data,aes(factor(shamRate),FrustNormalized),width = .2,alpha=.2)+
+  geom_point(size=2.25)+ 
+  geom_line(aes(group=1), size=0.55) +
+  geom_jitter(data=data,aes(factor(shamRate),FrustNormalized),height=.015, width = .2,alpha=.2, size=1.5)+
   ylim(0,1) +
   theme_bw() +
   theme(text = element_text(size = 13)) +
@@ -122,7 +122,7 @@ ggplot(dsm, aes(x=dsm$shamRate, y=dsm$controlNormalized)) +
   geom_point(size=3.25) + 
   geom_line(aes(group=1), size=1.25) +
   #geom_point(data=data,aes(factor(shamRate),controlNormalized))+
-  geom_jitter(data=data,aes(factor(shamRate),controlNormalized),width = .2,alpha=.2)+
+  geom_jitter(data=data,aes(factor(shamRate),controlNormalized),height=.015, width = .2,alpha=.2)+
   ylim(0,1) +
   theme_bw() +
   theme(text = element_text(size = 13)) +
